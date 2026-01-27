@@ -1,8 +1,8 @@
-package com.Oran.Makizone.Service.Catalog;
+package com.Oran.Makizone.Database.HibernateJPA.Service.Catalog;
 
 
-import com.Oran.Makizone.Model.Catalog.ProductSKU;
-import com.Oran.Makizone.Repository.Catalog.ProductSKURepo;
+import com.Oran.Makizone.Database.HibernateJPA.Model.Catalog.ProductSKU;
+import com.Oran.Makizone.Database.HibernateJPA.Repository.Catalog.ProductSKURepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

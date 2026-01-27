@@ -1,4 +1,4 @@
-package com.Oran.Makizone.Model.Catalog;
+package com.Oran.Makizone.Database.HibernateJPA.Model.Catalog;
 
 
 import jakarta.persistence.*;

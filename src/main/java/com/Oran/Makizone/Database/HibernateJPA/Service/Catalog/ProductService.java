@@ -1,9 +1,9 @@
-package com.Oran.Makizone.Service.Catalog;
+package com.Oran.Makizone.Database.HibernateJPA.Service.Catalog;
 
 
-import com.Oran.Makizone.Model.Catalog.Category;
-import com.Oran.Makizone.Model.Catalog.Product;
-import com.Oran.Makizone.Repository.Catalog.ProductRepo;
+import com.Oran.Makizone.Database.HibernateJPA.Model.Catalog.Category;
+import com.Oran.Makizone.Database.HibernateJPA.Model.Catalog.Product;
+import com.Oran.Makizone.Database.HibernateJPA.Repository.Catalog.ProductRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.Oran.Makizone.Repository.Catalog;
+package com.Oran.Makizone.Database.HibernateJPA.Repository.Catalog;
 
-import com.Oran.Makizone.Model.Catalog.Product;
+import com.Oran.Makizone.Database.HibernateJPA.Model.Catalog.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

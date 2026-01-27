@@ -1,7 +1,7 @@
-package com.Oran.Makizone.Repository;
+package com.Oran.Makizone.Repository.Catalog;
 
 
-import com.Oran.Makizone.Model.Category;
+import com.Oran.Makizone.Model.Catalog.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

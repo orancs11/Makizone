@@ -1,11 +1,8 @@
 package com.Oran.Makizone;
 
-import com.Oran.Makizone.Model.Category;
-import com.Oran.Makizone.Model.ProductSKU;
-import com.Oran.Makizone.Service.CategoryService;
-import com.Oran.Makizone.Service.ProductSKUService;
-import com.Oran.Makizone.Service.ProductService;
-import org.hibernate.SessionBuilder;
+import com.Oran.Makizone.Service.Catalog.CategoryService;
+import com.Oran.Makizone.Service.Catalog.ProductSKUService;
+import com.Oran.Makizone.Service.Catalog.ProductService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;

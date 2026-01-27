@@ -1,10 +1,8 @@
-package com.Oran.Makizone.Service;
+package com.Oran.Makizone.Service.Catalog;
 
 
-import com.Oran.Makizone.Model.Product;
-import com.Oran.Makizone.Model.ProductSKU;
-import com.Oran.Makizone.Repository.ProductSKURepo;
-import org.aspectj.apache.bcel.classfile.Module;
+import com.Oran.Makizone.Model.Catalog.ProductSKU;
+import com.Oran.Makizone.Repository.Catalog.ProductSKURepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

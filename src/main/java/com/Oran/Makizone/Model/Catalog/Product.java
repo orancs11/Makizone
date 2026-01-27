@@ -1,4 +1,4 @@
-package com.Oran.Makizone.Model;
+package com.Oran.Makizone.Model.Catalog;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;

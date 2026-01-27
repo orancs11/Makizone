@@ -20,7 +20,7 @@ public class User {
     private String email;
     @Column(name = "password_hash", nullable = false)
     private String password;
-    @Column(name = "full_name", nullable = false, unique = true)
+    @Column(name = "full_name", nullable = false)
     private String fullName;
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(name = "role", nullable = false)

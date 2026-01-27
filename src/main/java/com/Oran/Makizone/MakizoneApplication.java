@@ -1,5 +1,6 @@
 package com.Oran.Makizone;
 
+import com.Oran.Makizone.Service.CategoryService;
 import org.hibernate.SessionBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +12,7 @@ public class MakizoneApplication {
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(MakizoneApplication.class, args);
 		
+
 	}
 
 }

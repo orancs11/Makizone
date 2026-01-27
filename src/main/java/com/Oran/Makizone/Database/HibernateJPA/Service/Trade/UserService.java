@@ -35,7 +35,7 @@ public class UserService {
 
         User user = new User();
         user.setEmail(email);
-        user.setPassword(Hasher.hashed_password(password));
+        user.setPassword(Hasher.hashPassword(password));
         user.setFullName(fullName);
         user.setAddress(address);
         this.repo.save(user);
@@ -45,12 +45,12 @@ public class UserService {
 
     public boolean loginUser(LoginRequest loginRequest){
         String email = loginRequest.getEmail();
-        String hashedPassword = Hasher.hashed_password(loginRequest.getPassword());
+        String password = loginRequest.getPassword();
 
         Optional<User> temp = this.repo.findByEmail(email);
         if(temp.isPresent()){
             User tempUser = temp.get();
-            return tempUser.getEmail().equals(email) && tempUser.getPassword().equals(hashedPassword);
+            return tempUser.getEmail().equals(email) && Hasher.verifyPassword(password, tempUser.getPassword());
         }
         return false;
     }

@@ -11,11 +11,8 @@ import java.util.List;
 
 @Service
 public class CategoryService {
-    private CategoryRepo repo;
     @Autowired
-    public CategoryService(CategoryRepo repo){
-        this.repo = repo;
-    }
+    private CategoryRepo repo;
 
     @Transactional
     public void createCategory(String name, String slug, String desc){

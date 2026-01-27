@@ -11,7 +11,9 @@ public class MakizoneApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(MakizoneApplication.class, args);
-		
+		CategoryService service = context.getBean(CategoryService.class);
+
+
 
 	}
 

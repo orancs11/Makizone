@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepo extends JpaRepository {
+public interface CategoryRepo extends JpaRepository<Category, Long> {
 
     public Optional<Category> findBySlug(String slug);
 }

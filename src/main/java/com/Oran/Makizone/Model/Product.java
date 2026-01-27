@@ -13,7 +13,7 @@ import java.util.Map;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column(name="name", nullable = false)
     private String name;
     @Column(name="scientific_name", nullable = false)
@@ -27,7 +27,7 @@ public class Product {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name="base_stats", columnDefinition = "jsonb")
-    private Map<String, Integer> baseStats;
+    private Map<String, Object> baseStats;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
@@ -37,11 +37,11 @@ public class Product {
     private Category category;
 
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,11 +77,11 @@ public class Product {
         this.tags = tags;
     }
 
-    public Map<String, Integer> getBaseStats() {
+    public Map<String, Object> getBaseStats() {
         return baseStats;
     }
 
-    public void setBaseStats(Map<String, Integer> baseStats) {
+    public void setBaseStats(Map<String, Object> baseStats) {
         this.baseStats = baseStats;
     }
 

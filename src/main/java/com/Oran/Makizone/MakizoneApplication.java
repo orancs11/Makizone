@@ -1,6 +1,8 @@
 package com.Oran.Makizone;
 
+import com.Oran.Makizone.Model.Category;
 import com.Oran.Makizone.Service.CategoryService;
+import com.Oran.Makizone.Service.ProductService;
 import org.hibernate.SessionBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,10 +13,8 @@ public class MakizoneApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(MakizoneApplication.class, args);
-		CategoryService service = context.getBean(CategoryService.class);
-
-
-
+		CategoryService categoryservice = context.getBean(CategoryService.class);
+		ProductService productService = context.getBean(ProductService.class);
 	}
 
 }

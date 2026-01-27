@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -23,6 +24,15 @@ public class CategoryService {
         repo.save(category);
     }
 
+    public Category getCategory(int id){
+        Optional<Category> temp = this.repo.findById(id);
+        Category result = new Category();
+        if(temp.isPresent()){
+            result = temp.get();
+        }
+        return result;
+    }
+
     @Transactional
     public void addCategory(Category category){
         repo.save(category);
@@ -32,4 +42,15 @@ public class CategoryService {
     public void addCategories(List<Category> categoryList){
         repo.saveAll(categoryList);
     }
+
+    @Transactional
+    public void removeCategory(Category category){
+        this.repo.delete(category);
+    }
+
+    @Transactional
+    public void removeCategory(Long id){
+        this.repo.deleteById(id);
+    }
+
 }

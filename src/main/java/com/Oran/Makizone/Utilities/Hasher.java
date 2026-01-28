@@ -1,5 +1,7 @@
 package com.Oran.Makizone.Utilities;
 
+import org.springframework.stereotype.Component;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -7,11 +9,13 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
+
+@Component
 public class Hasher {
 
-    private static final int ITERATIONS = 65536;
-    private static final int KEY_LENGTH = 256;
-    private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
+    private static final int ITERATIONS = GlobalVariables.HITERATIONS;
+    private static final int KEY_LENGTH = GlobalVariables.HKEY_LENGTH;
+    private static final String ALGORITHM = GlobalVariables.HALGORITHM;
 
     public static String hashPassword(String password) {
         try {

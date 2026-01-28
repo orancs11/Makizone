@@ -1,4 +1,4 @@
-package com.Oran.Makizone.Utilities;
+package com.Oran.Makizone.Utilities.Enums;
 
 public enum GardenTheme {
     //Defaults

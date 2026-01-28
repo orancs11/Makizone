@@ -1,7 +1,7 @@
 package com.Oran.Makizone.Database.HibernateJPA.Model.Trade;
 
 
-import com.Oran.Makizone.Utilities.OrderStatus;
+import com.Oran.Makizone.Utilities.Enums.OrderStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;

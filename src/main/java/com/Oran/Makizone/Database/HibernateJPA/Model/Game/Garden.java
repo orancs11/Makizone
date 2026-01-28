@@ -1,7 +1,7 @@
 package com.Oran.Makizone.Database.HibernateJPA.Model.Game;
 
 import com.Oran.Makizone.Database.HibernateJPA.Model.Trade.User;
-import com.Oran.Makizone.Utilities.GardenTheme;
+import com.Oran.Makizone.Utilities.Enums.GardenTheme;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;

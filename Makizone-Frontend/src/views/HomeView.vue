@@ -4,8 +4,8 @@
     <nav class="navbar">
       <div class="logo">🍏 Makizone</div>
       <div class="nav-links">
-        <RouterLink to="/login" class="nav-item">Log In</RouterLink>
-        <RouterLink to="/signup" class="nav-item signup">Sign Up</RouterLink>
+        <RouterLink to="/login" class="nav-item login register">Log In</RouterLink>
+        <RouterLink to="/register" class="nav-item register">Register</RouterLink>
       </div>
     </nav>
 
@@ -85,7 +85,7 @@ import { RouterLink } from 'vue-router'
   margin-left: 2rem;
 }
 
-.signup {
+.register {
   border: 2px solid #2e8b57;
   padding: 5px 15px;
   /* Irregular border radius for hand-drawn look */
@@ -93,7 +93,7 @@ import { RouterLink } from 'vue-router'
   transition: all 0.2s;
 }
 
-.signup:hover {
+.register:hover {
   background-color: #2e8b57;
   color: white;
   transform: scale(1.1) rotate(2deg);

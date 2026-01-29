@@ -1,6 +1,5 @@
 package com.Oran.Makizone.Database.HibernateJPA.Model.Catalog;
 
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -14,7 +13,7 @@ public class ProductSKU {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="sku_code", nullable = false, unique = true)
+    @Column(name = "sku_code", nullable = false, unique = true)
     private String skuCode;
     @Column(name = "name", nullable = false)
     private String name;
@@ -23,7 +22,7 @@ public class ProductSKU {
     private Map<String, Object> attributes;
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-    @Column(name="stock_quantity")
+    @Column(name = "stock_quantity")
     private Integer stock_quantity;
     @Column(name = "is_active")
     private Boolean isActive;
@@ -31,9 +30,8 @@ public class ProductSKU {
     private String mediaUrl;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productid")
     private Product product;
-
 
     public Long getId() {
         return id;

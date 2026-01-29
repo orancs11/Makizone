@@ -13,42 +13,48 @@ const router = createRouter({
       name: 'home',
       component: HomeView
     },
-      {
-	  path: '/register',
-	  name: 'register',
-	  component: RegisterView
-      },
-      {
-	  path: '/login',
-	  name: 'login',
-	  component: LoginView
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView
 
-      },
-      {
-	  path: '/dashboard',
-	  name: 'dashboard',
-	  component: DashboardView,
-	  meta: {requiresAuth: true}
-      },
-      {
-	  path: '/garden',
-	  name: 'garden',
-	  component: GardenView,
-	  meta: {requiresAuth: true}
-      }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/garden',
+      name: 'garden',
+      component: GardenView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/market',
+      name: 'market',
+      component: () => import('../views/MarketView.vue'),
+      meta: { requiresAuth: true }
+    }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-    const token = localStorage.getItem('token')
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const token = localStorage.getItem('token')
 
-    if(requiresAuth && !token){
-	next('/login')
-    }
-    else{
-	next()
-    }
+  if (requiresAuth && !token) {
+    next('/login')
+  }
+  else {
+    next()
+  }
 
 })
 

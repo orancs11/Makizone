@@ -1,6 +1,5 @@
 package com.Oran.Makizone.Controller;
 
-
 import com.Oran.Makizone.DTO.GardenRequest;
 import com.Oran.Makizone.DTO.GardenResponse;
 import com.Oran.Makizone.Database.HibernateJPA.Model.Game.Garden;
@@ -24,16 +23,21 @@ public class GardenController {
     private final UserService userService;
     private final GardenService gardenService;
     private final ProductService productService;
+    private final com.Oran.Makizone.Database.HibernateJPA.Service.Game.PlayerProfileService playerProfileService;
+
     @Autowired
-    public GardenController(UserService userService, TokenService tokenService, GardenService gardenService, ProductService productService){
+    public GardenController(UserService userService, TokenService tokenService, GardenService gardenService,
+            ProductService productService,
+            com.Oran.Makizone.Database.HibernateJPA.Service.Game.PlayerProfileService playerProfileService) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.gardenService = gardenService;
         this.productService = productService;
+        this.playerProfileService = playerProfileService;
     }
 
     @GetMapping
-    public ResponseEntity<GardenResponse> getMyGarden(@RequestHeader("Authorization") String token){
+    public ResponseEntity<GardenResponse> getMyGarden(@RequestHeader("Authorization") String token) {
         String email = tokenService.extractMail(token);
         User user = userService.findUser(email);
         Garden garden = gardenService.findGarden(user);
@@ -64,7 +68,7 @@ public class GardenController {
 
         // 3. Update garden layout
         Map<String, Object> layoutData = garden.getLayoutData();
-        updateGardenLayout(layoutData, rowIndex, colIndex, action, item);
+        updateGardenLayout(user, layoutData, rowIndex, colIndex, action, item);
 
         // 4. Save changes
         garden.setTheme(theme);
@@ -76,6 +80,7 @@ public class GardenController {
 
     // Helper method to handle layout logic
     private void updateGardenLayout(
+            User user,
             Map<String, Object> layoutData,
             int rowIndex,
             int colIndex,
@@ -85,16 +90,30 @@ public class GardenController {
         List<List<Integer>> grid = (List<List<Integer>>) layoutData.get("grid");
         Map<String, String> items = (Map<String, String>) layoutData.get("items");
 
-        // Remove current item from cell
+        // Items map stores: "ProductCategoryID" -> "ProductName"
+        // Grid stores: Integer (ProductCategoryID) or 0
+
+        // Handle Harvest/Clear
         int currentItemNo = grid.get(rowIndex).get(colIndex);
         if (currentItemNo != 0) {
+            // HARVEST Logic
             items.remove(String.valueOf(currentItemNo));
+
+            // Allow harvesting implies gaining stats
+            // Arbitrary rewards: +5 Health, +2 Fame
+            playerProfileService.addStats(user, 5, 2);
         }
         grid.get(rowIndex).set(colIndex, 0);
 
         // Plant new item if action is PLANT
         if ("PLANT".equals(action)) {
             String itemNo = productService.categoryNumber(item);
+
+            // CHECK INVENTORY
+            if (!playerProfileService.removeItemFromInventory(user, itemNo, 1)) {
+                throw new RuntimeException("Not enough seeds to plant " + item);
+            }
+
             grid.get(rowIndex).set(colIndex, Integer.valueOf(itemNo));
             items.put(itemNo, item);
         }

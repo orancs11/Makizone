@@ -20,63 +20,95 @@ const itemIcons = {
   "3": "🍅"  // Tomato
 }
 
-// 1. FETCH GARDEN ON LOAD
-const fetchGarden = async () => {
-  try {
-    const response = await api.get('/garden')
-    garden.value = response.data.layoutData
-    loading.value = false
-  } catch (error) {
-    console.error("Failed to load garden:", error)
-  }
-}
+        // 1. FETCH GARDEN & PRODUCTS
+        const inventory = ref({})
+        const products = ref([])
+        const productMap = ref({}) // CatID -> ProductName
 
-// 2. HANDLE CLICK
-const handlePlotClick = (rowIndex, colIndex) => {
-  const cellValue = garden.value.grid[rowIndex][colIndex]
+        const fetchData = async () => {
+            try {
+                const [gardenRes, profileRes, marketRes] = await Promise.all([
+                    api.get('/garden'),
+                    api.get('/profile'),
+                    api.get('/market')
+                ])
+                garden.value = gardenRes.data.layoutData
+                inventory.value = profileRes.data.inventory || {}
+                
+                // Build a map of CategoryID -> Product Name
+                // We use the first product found for a category as the "Seed Name"
+                marketRes.data.forEach(p => {
+                    if (p.category) {
+                         const catId = String(p.category.id || p.category);
+                         if (!productMap.value[catId]) {
+                             productMap.value[catId] = p.name;
+                         }
+                    }
+                })
+                
+                loading.value = false
+            } catch (error) {
+                console.error("Failed to load data:", error)
+                loading.value = false
+            }
+        }
+        
+        // 2. HANDLE CLICK
+        const handlePlotClick = (rowIndex, colIndex) => {
+          const cellValue = garden.value.grid[rowIndex][colIndex]
 
-  if (cellValue === 0) {
-    // EMPTY PLOT -> Open Seed Menu
-    selectedPlot.value = { r: rowIndex, c: colIndex }
-    showSeedMenu.value = true
-  } else {
-    // PLANTED PLOT -> Harvest (Simple Logic for now)
-    performAction(rowIndex, colIndex, "HARVEST", null)
-  }
-}
+          if (cellValue === 0) {
+            // EMPTY PLOT -> Open Seed Menu
+            selectedPlot.value = { r: rowIndex, c: colIndex }
+            showSeedMenu.value = true
+          } else {
+            // PLANTED PLOT -> Harvest
+            performAction(rowIndex, colIndex, "HARVEST", null)
+          }
+        }
 
-// 3. SEND ACTION TO BACKEND
-const performAction = async (r, c, actionType, itemName) => {
-  try {
-    // Hide menu if open
-    showSeedMenu.value = false
+        // 3. SEND ACTION TO BACKEND
+        const performAction = async (r, c, actionType, itemName) => {
+          try {
+            showSeedMenu.value = false
+            const actionItemMap = {}
+            actionItemMap[actionType] = itemName || "None"
 
-    // Prepare the special "actionItem" map your Controller expects
-    // structure: { "PLANT": "Carrot" }
-    const actionItemMap = {}
-    actionItemMap[actionType] = itemName || "None"
+            const payload = {
+              rowIndex: r,
+              colIndex: c,
+              theme: "DEFAULT_FARM",
+              actionItem: actionItemMap
+            }
 
-    const payload = {
-      rowIndex: r,
-      colIndex: c,
-      theme: "DEFAULT_FARM", // Keep current theme
-      actionItem: actionItemMap
-    }
+            const response = await api.post('/garden/action', payload)
+            garden.value = response.data.layoutData
+            
+            // Update local inventory if planting
+            if(actionType === 'PLANT' && itemName) {
+                updateInventory()
+            } else if (actionType === 'HARVEST') {
+                 // alert("Harvested! Gained +5 Health, +2 Fame.")
+                 updateInventory()
+            }
 
-    const response = await api.post('/garden/action', payload)
-    
-    // Update the view with the new garden state from backend
-    garden.value = response.data.layoutData
+          } catch (error) {
+            console.error("Action failed:", error)
+            alert("Could not perform action! " + (error.response?.data?.message || ""))
+          }
+        }
 
-  } catch (error) {
-    console.error("Action failed:", error)
-    alert("Could not perform action!")
-  }
-}
+        onMounted(() => {
+            fetchData()
+        })
 
-onMounted(() => {
-  fetchGarden()
-})
+        // ... existing code ...
+
+        // Update inventory after plant refetch
+        const updateInventory = async () => {
+             const profileRes = await api.get('/profile')
+             inventory.value = profileRes.data.inventory || {}
+        }
 </script>
 
 <template>
@@ -115,9 +147,16 @@ onMounted(() => {
       <div class="paper-card modal-card">
         <h3>What to plant?</h3>
         <div class="seed-options">
-          <button @click="performAction(selectedPlot.r, selectedPlot.c, 'PLANT', 'Carrot')" class="btn-doodle">🥕 Carrot</button>
-          <button @click="performAction(selectedPlot.r, selectedPlot.c, 'PLANT', 'Corn')" class="btn-doodle">🌽 Corn</button>
-          <button @click="performAction(selectedPlot.r, selectedPlot.c, 'PLANT', 'Tomato')" class="btn-doodle">🍅 Tomato</button>
+          <div v-if="Object.keys(inventory).length === 0">No seeds available! Go to Market.</div>
+          <button 
+             v-for="(count, catId) in inventory" 
+             :key="catId"
+             @click="performAction(selectedPlot.r, selectedPlot.c, 'PLANT', productMap[catId] || 'Unknown')"
+             class="btn-doodle"
+             :disabled="count <= 0"
+          >
+             {{ productMap[catId] || 'Seed #' + catId }} (x{{ count }})
+          </button>
         </div>
         <button @click="showSeedMenu = false" class="close-btn">Cancel</button>
       </div>

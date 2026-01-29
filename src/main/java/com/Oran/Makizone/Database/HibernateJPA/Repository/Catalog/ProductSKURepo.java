@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ProductSKURepo extends JpaRepository<ProductSKU, Long> {
 
     public Optional<ProductSKU> findByName(String name);
+
+    java.util.List<ProductSKU> findByProduct(com.Oran.Makizone.Database.HibernateJPA.Model.Catalog.Product product);
 }

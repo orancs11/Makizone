@@ -1,13 +1,33 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '../services/api'
 
 const userName = ref('Farmer')
+const stats = ref({
+  health: 0,
+  fame: 0,
+  level: 1,
+  title: 'Novice'
+})
 const router = useRouter()
 
-onMounted(() => {
+onMounted(async () => {
   // 1. Get User Info from Storage
-  userName.value = localStorage.getItem('username')
+  userName.value = localStorage.getItem('fullName') || 'Farmer'
+
+  // 2. Fetch Profile Stats
+  try {
+    const response = await api.get('/profile')
+    stats.value = {
+      health: response.data.healthPoints,
+      fame: response.data.famePoints,
+      level: response.data.currentLevel,
+      title: response.data.activeTitle
+    }
+  } catch (error) {
+    console.error("Failed to load profile:", error)
+  }
 })
 
 const handleLogout = () => {
@@ -32,6 +52,12 @@ const handleLogout = () => {
       <div class="paper-card header-card">
         <div class="tape"></div>
         <h1>Welcome back, {{ userName }}!</h1>
+        <div class="stats-bar">
+           <span title="Health">❤️ {{ stats.health }}</span>
+           <span title="Fame">⭐ {{ stats.fame }}</span>
+           <span title="Level">🆙 Lvl {{ stats.level }}</span>
+           <span class="badgetitle">🏷️ {{ stats.title }}</span>
+        </div>
         <p>Your garden is waiting. What would you like to do?</p>
       </div>
 
@@ -46,7 +72,7 @@ const handleLogout = () => {
         <div class="paper-card menu-item">
           <h2>💰 The Market</h2>
           <p>Sell crops & buy seeds.</p>
-          <button class="btn-doodle">Go to Market</button>
+          <button @click="router.push('/market')" class="btn-doodle">Go to Market</button>
         </div>
 
       </div>
@@ -99,6 +125,22 @@ const handleLogout = () => {
 
 .header-card {
   text-align: center;
+}
+
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-size: 1.2rem;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.badgetitle {
+  background: #e8f5e9;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px dashed #2e8b57;
 }
 
 .tape {

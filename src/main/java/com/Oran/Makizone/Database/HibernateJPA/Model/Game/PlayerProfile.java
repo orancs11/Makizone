@@ -1,6 +1,5 @@
 package com.Oran.Makizone.Database.HibernateJPA.Model.Game;
 
-
 import com.Oran.Makizone.Database.HibernateJPA.Model.Trade.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -35,8 +34,13 @@ public class PlayerProfile {
     @Column(name = "badges")
     private Map<String, Object> badges;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "inventory")
+    private Map<String, Integer> inventory;
+
     @OneToOne
     @JoinColumn(name = "user_id")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private User user;
 
     public Long getId() {
@@ -93,6 +97,14 @@ public class PlayerProfile {
 
     public void setBadges(Map<String, Object> badges) {
         this.badges = badges;
+    }
+
+    public Map<String, Integer> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Map<String, Integer> inventory) {
+        this.inventory = inventory;
     }
 
     public User getUser() {

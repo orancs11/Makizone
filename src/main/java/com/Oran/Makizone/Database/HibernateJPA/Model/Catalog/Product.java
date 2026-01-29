@@ -9,33 +9,32 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(schema = "`Makizone-Catalog`", name="Product")
+@Table(schema = "`Makizone-Catalog`", name = "Product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name="scientific_name", nullable = false)
+    @Column(name = "scientific_name", nullable = false)
     private String scientificName;
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
     @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(name="tags", columnDefinition = "text[]")
+    @Column(name = "tags", columnDefinition = "text[]")
     private List<String> tags;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name="base_stats", columnDefinition = "jsonb")
+    @Column(name = "base_stats", columnDefinition = "jsonb")
     private Map<String, Object> baseStats;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="category_id")
+    @JoinColumn(name = "category_id")
     private Category category;
-
 
     public Long getId() {
         return id;
@@ -111,7 +110,7 @@ public class Product {
                 ", tags=" + tags +
                 ", baseStats=" + baseStats +
                 ", createdAt=" + createdAt +
-                ", category=" + category +
+                ", category=" + (category != null ? category.getName() : "null") +
                 '}';
     }
 }

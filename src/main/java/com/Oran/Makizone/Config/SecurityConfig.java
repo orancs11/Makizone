@@ -31,11 +31,11 @@ public class SecurityConfig {
                 // 3. Define URL Rules
                 .authorizeHttpRequests(auth -> auth
                         // Allow anyone to access Login and Register
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/garden/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         // Block everything else
-                        .anyRequest().authenticated()
-                ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));;
+                        .anyRequest().authenticated())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        ;
 
         return http.build();
     }

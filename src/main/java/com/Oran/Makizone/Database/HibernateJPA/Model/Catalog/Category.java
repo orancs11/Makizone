@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(schema="`Makizone-Catalog`", name="category")
+@Table(schema = "`Makizone-Catalog`", name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +23,11 @@ public class Category {
     @Column(name = "description", nullable = true, columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Category parent;
-    @OneToMany(mappedBy="parent", cascade= CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> children = new ArrayList<>();
 
     public Long getId() {
@@ -84,8 +85,6 @@ public class Category {
                 ", name='" + name + '\'' +
                 ", slug='" + slug + '\'' +
                 ", description='" + description + '\'' +
-                ", parent=" + parent +
-                ", children=" + children +
                 '}';
     }
 }

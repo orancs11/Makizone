@@ -7,16 +7,14 @@ import com.Oran.Makizone.Database.HibernateJPA.Model.Trade.User;
 import com.Oran.Makizone.Database.HibernateJPA.Repository.Trade.UserRepo;
 import com.Oran.Makizone.Utilities.Exceptions.InvalidCredentialsException;
 import com.Oran.Makizone.Utilities.Exceptions.UserAlreadyExistException;
+import com.Oran.Makizone.Utilities.Exceptions.UserNotFoundException;
 import com.Oran.Makizone.Utilities.Hasher;
 import com.Oran.Makizone.Utilities.TokenService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -58,23 +56,27 @@ public class UserService {
 
     }
 
-    public String loginUser(LoginRequest loginRequest){
+    public Map<String, String> loginUser(LoginRequest loginRequest){
+        Map<String, String> result = new HashMap<>();
         String email = loginRequest.getEmail();
-        if(email.isEmpty() || !email.contains("@")) throw new InvalidCredentialsException("UserService.registerUser - EMAIL CAN'T BE EMPTY AND MUST CONTAIN @");
+        if(email.isEmpty() || !email.contains("@")) throw new InvalidCredentialsException("UserService.loginUser - EMAIL CAN'T BE EMPTY AND MUST CONTAIN @");
         String password = loginRequest.getPassword();
-        if(password.isEmpty()) throw new InvalidCredentialsException("UserService.registerUser - PASSWORD CAN'T BE EMPTY");
-        if(!checkUserExist(email, password)) throw new InvalidCredentialsException("UserService.loginUser - USER IS NOT EXIST | CHECK CREDENTIALS AGAIN!");
-
-        return tokenService.generateToken(email);
+        if(password.isEmpty()) throw new InvalidCredentialsException("UserService.loginUser - PASSWORD CAN'T BE EMPTY");
+        User currUser = checkUserExist(email, password);
+        if(currUser == null) throw new UserNotFoundException("UserService.loginUser - USER DOES NOT EXIST!");
+        result.put("token", tokenService.generateToken(email));
+        result.put("fullName", currUser.getFullName());
+        return result;
     }
 
 
 
-    private boolean checkUserExist(String email, String password){
+    private User checkUserExist(String email, String password){
         Optional<User> list= this.repo.findByEmail(email);
-        if(!list.isPresent()) return false;
+        if(!list.isPresent()) return null;
         User user = list.get();
-        return Hasher.verifyPassword(password, user.getPassword());
+        if(!Hasher.verifyPassword(password, user.getPassword())) return null;
+        return user;
     }
 
 

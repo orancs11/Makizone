@@ -23,9 +23,8 @@ const handleLogin = async () => {
     // 2. SUCCESS!
     console.log("Login Success:", response.data)
     
-    // TODO: We will save the JWT Token here in the next step
-    // localStorage.setItem('token', response.data.token)
-
+    localStorage.setItem('token', response.data.token)
+    localStorage.setItem('username', response.data.fullName)
     // 3. Go to Dashboard (Home for now)
     router.push('/')
 

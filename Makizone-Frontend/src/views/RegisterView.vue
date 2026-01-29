@@ -1,14 +1,41 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import api from '../services/api'
 
 const fullName = ref('')
 const email = ref('')
 const password = ref('')
 const address = ref('')
+const errorMessage = ref('')
+const router = useRouter()
 
-const handleRegister = () => {
-  console.log("Registering:", fullName.value, email.value)
-  alert("Creating your garden...")
+const handleRegister = async () => {
+  errorMessage.value = ''
+  try{
+	const response = await api.post('/auth/register', {
+	fullName: fullName.value,
+	email: email.value,
+	password: password.value,
+	address: {
+		 fullAddress: address.value
+		}
+	})
+	console.log("Registering:", fullName.value, email.value)
+	alert("Creating your garden...")
+	router.push('/login')
+  }
+  catch(error){
+	console.error("Registration process has failed:", error)
+	if(error.response && error.response.status == 401){
+	errorMessage.value = "Wrong email or password!"
+
+	}
+	else{
+	errorMessage.value = "Server is sleeping. Try again later."
+	}
+  }
+  
 }
 </script>
 

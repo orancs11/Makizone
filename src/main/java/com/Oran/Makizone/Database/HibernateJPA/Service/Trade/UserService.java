@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ public class UserService {
         if(password.isEmpty()) throw new InvalidCredentialsException("UserService.registerUser - PASSWORD CAN'T BE EMPTY");
         String fullName = registerRequest.getFullName();
         if(fullName.isEmpty()) throw new InvalidCredentialsException("UserService.registerUser - NAME CAN'T BE EMPTY");
-        Map<String, String> address = registerRequest.getAddress();
+        Map<String, Object> address = registerRequest.getAddress();
         if(address.isEmpty()) throw new InvalidCredentialsException("userService.registerUser - ADDRESS MUST BE FILLED");
 
         Optional<User> temp = this.repo.findByEmail(email);
@@ -47,6 +49,9 @@ public class UserService {
         user.setPassword(Hasher.hashPassword(password));
         user.setFullName(fullName);
         user.setAddress(address);
+        List<String> roles = new ArrayList<>();
+        roles.add("CUSTOMER");
+        user.setRole(roles);
 
         this.repo.save(user);
         System.out.println("UserService.registerUser - USER SUCCESSFULLY ADDED TO DATABASE!");
@@ -58,7 +63,7 @@ public class UserService {
         if(email.isEmpty() || !email.contains("@")) throw new InvalidCredentialsException("UserService.registerUser - EMAIL CAN'T BE EMPTY AND MUST CONTAIN @");
         String password = loginRequest.getPassword();
         if(password.isEmpty()) throw new InvalidCredentialsException("UserService.registerUser - PASSWORD CAN'T BE EMPTY");
-        if(!checkUserExist(email, password)) throw new InvalidCredentialsException("UserService.loginUser");
+        if(!checkUserExist(email, password)) throw new InvalidCredentialsException("UserService.loginUser - USER IS NOT EXIST | CHECK CREDENTIALS AGAIN!");
 
         return tokenService.generateToken(email);
     }

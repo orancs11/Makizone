@@ -26,8 +26,8 @@ public class User {
     @Column(name = "role", nullable = false)
     private List<String> role;
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "address")
-    private Map<String, String> address;
+    @Column(name = "address", nullable = false)
+    private Map<String, Object> address;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -72,11 +72,11 @@ public class User {
         this.role = role;
     }
 
-    public Map<String, String> getAddress() {
+    public Map<String, Object> getAddress() {
         return address;
     }
 
-    public void setAddress(Map<String, String> address) {
+    public void setAddress(Map<String, Object> address) {
         this.address = address;
     }
 

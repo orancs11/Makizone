@@ -1,21 +1,47 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '../services/api' // Import the tool we just made
 
-// 1. THE BRAIN (State)
-// 'ref' makes a variable "Reactive". If you change it here, it updates on screen instantly.
 const email = ref('')
 const password = ref('')
+const errorMessage = ref('') // To show red text if login fails
 const router = useRouter()
 
-// 2. THE ACTION
-const handleLogin = () => {
-  // We will add the Axios call here later!
-  console.log("Logging in with:", email.value, password.value)
-  alert("Trying to login... (Check Console)")
+const handleLogin = async () => {
+  // Clear previous errors
+  errorMessage.value = ''
+  
+  try {
+    // 1. DIAL THE SERVER
+    // We only type '/auth/login' because baseURL is already set!
+    const response = await api.post('/auth/login', {
+      email: email.value,
+      password: password.value
+    })
+
+    // 2. SUCCESS!
+    console.log("Login Success:", response.data)
+    
+    // TODO: We will save the JWT Token here in the next step
+    // localStorage.setItem('token', response.data.token)
+
+    // 3. Go to Dashboard (Home for now)
+    router.push('/')
+
+  } catch (error) {
+    // 4. FAILURE
+    console.error("Login Failed:", error)
+    
+    // Show a nice message to the user
+    if (error.response && error.response.status === 401) {
+      errorMessage.value = "Wrong email or password!"
+    } else {
+      errorMessage.value = "Server is sleeping. Try again later."
+    }
+  }
 }
 </script>
-
 <template>
   <div class="doodle-container">
     <RouterLink to="/" class="back-link">← Back to Garden</RouterLink>
@@ -24,7 +50,9 @@ const handleLogin = () => {
       <div class="tape"></div>
       
       <h1>Unlock Garden</h1>
-      
+      <div v-if="errorMessage" class="error-box">
+        {{ errorMessage }}
+      </div>
       <form @submit.prevent="handleLogin">
         <div class="input-group">
           <label>Email</label>
@@ -155,5 +183,16 @@ input:focus {
 .switch-link a {
   color: #2e8b57;
   font-weight: bold;
+}
+
+.error-box {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 2px dashed #dc2626;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
 }
 </style>

@@ -6,9 +6,9 @@ public class RegisterRequest {
     private String email;
     private String password;
     private String fullName;
-    private Map<String, String> address;
+    private Map<String, Object> address;
 
-    public RegisterRequest(String email, String password, String fullName, Map<String, String> address){
+    public RegisterRequest(String email, String password, String fullName, Map<String, Object> address){
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -27,7 +27,7 @@ public class RegisterRequest {
         return fullName;
     }
 
-    public Map<String, String> getAddress() {
+    public Map<String, Object> getAddress() {
         return address;
     }
 

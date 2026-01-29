@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductService {
     private ProductRepo repo;
@@ -24,5 +26,17 @@ public class ProductService {
         tempProduct.setDescription(description);
         tempProduct.setCategory(category);
         this.repo.save(tempProduct);
+    }
+
+    public String categoryNumber(String name){
+        Product currProduct = getProduct(name);
+        Category currCategory = currProduct.getCategory();
+        return String.valueOf(currCategory.getId());
+    }
+
+    private Product getProduct(String name){
+        Optional<Product> currProduct = this.repo.findByName(name);
+        if(currProduct.isEmpty()) return null;
+        return currProduct.get();
     }
 }

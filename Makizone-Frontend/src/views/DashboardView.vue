@@ -18,6 +18,7 @@ const handleLogout = () => {
   // 2. Redirect to Guest Home
   router.push('/')
 }
+
 </script>
 
 <template>
@@ -39,7 +40,7 @@ const handleLogout = () => {
         <div class="paper-card menu-item">
           <h2>🌱 My Garden</h2>
           <p>Water plants & harvest crops.</p>
-          <button class="btn-doodle">Enter Garden</button>
+          <button @click="router.push('/garden')" class="btn-doodle">Enter Garden</button>
         </div>
 
         <div class="paper-card menu-item">

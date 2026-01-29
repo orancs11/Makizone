@@ -80,7 +80,7 @@ public class UserService {
     private User saveUser(String email, String password, String fullName, Map<String, Object> address){
         User user = new User();
         user.setEmail(email);
-        user.setPassword(Hasher.hashPassword(password));
+        user.setPassword(password);
         user.setFullName(fullName);
         user.setAddress(address);
         List<String> roles = new ArrayList<>();

@@ -5,6 +5,7 @@ import com.Oran.Makizone.DTO.AuthResponse;
 import com.Oran.Makizone.DTO.LoginRequest;
 import com.Oran.Makizone.DTO.RegisterRequest;
 import com.Oran.Makizone.Database.HibernateJPA.Service.Trade.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class AuthController {
     private final UserService userService;
 
+    @Autowired
     public AuthController(UserService userService){
         this.userService = userService;
     }

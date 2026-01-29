@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -48,6 +49,7 @@ public class UserService {
         user.setFullName(fullName);
         user.setAddress(address);
         List<String> roles = new ArrayList<>();
+
         roles.add("CUSTOMER");
         user.setRole(roles);
 
@@ -59,7 +61,7 @@ public class UserService {
     public Map<String, String> loginUser(LoginRequest loginRequest){
         Map<String, String> result = new HashMap<>();
         String email = loginRequest.getEmail();
-        if(email.isEmpty() || !email.contains("@")) throw new InvalidCredentialsException("UserService.loginUser - EMAIL CAN'T BE EMPTY AND MUST CONTAIN @");
+        if(!email.contains("@")) throw new InvalidCredentialsException("UserService.loginUser - EMAIL CAN'T BE EMPTY AND MUST CONTAIN @");
         String password = loginRequest.getPassword();
         if(password.isEmpty()) throw new InvalidCredentialsException("UserService.loginUser - PASSWORD CAN'T BE EMPTY");
         User currUser = checkUserExist(email, password);
@@ -75,6 +77,7 @@ public class UserService {
         Optional<User> list= this.repo.findByEmail(email);
         if(!list.isPresent()) return null;
         User user = list.get();
+        System.out.println(user);
         if(!Hasher.verifyPassword(password, user.getPassword())) return null;
         return user;
     }

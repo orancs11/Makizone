@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import api from '../services/api' // Import the tool we just made
+import api from '../services/api' 
 
 const email = ref('')
 const password = ref('')
@@ -12,9 +12,7 @@ const handleLogin = async () => {
   // Clear previous errors
   errorMessage.value = ''
   
-  try {
-    // 1. DIAL THE SERVER
-    // We only type '/auth/login' because baseURL is already set!
+  try{
     const response = await api.post('/auth/login', {
       email: email.value,
       password: password.value
@@ -22,13 +20,13 @@ const handleLogin = async () => {
 
     // 2. SUCCESS!
     console.log("Login Success:", response.data)
-    
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('username', response.data.fullName)
-    // 3. Go to Dashboard (Home for now)
-    router.push('/')
+    
+    router.push('/Dashboard')
 
-  } catch (error) {
+  }
+  catch (error) {
     // 4. FAILURE
     console.error("Login Failed:", error)
     

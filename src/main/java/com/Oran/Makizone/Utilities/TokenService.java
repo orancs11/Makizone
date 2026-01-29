@@ -37,7 +37,10 @@ public class TokenService {
     }
 
     public String extractMail(String token){
-        return extractClaim(token, Claims::getSubject);
+        if(token == null || token.isEmpty()) return null;
+        String[] parts = token.split(" ");
+        String part = (parts.length == 2) ? parts[1] : token;
+        return extractClaim(part, Claims::getSubject);
     }
 
     private Date extractExpiration(String token){

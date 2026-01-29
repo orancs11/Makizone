@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(schema = "Makizone-Catalog", name="Product")
+@Table(schema = "`Makizone-Catalog`", name="Product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

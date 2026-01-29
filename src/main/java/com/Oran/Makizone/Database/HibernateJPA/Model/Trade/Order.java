@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
-@Table(schema="Makizone-Trade", name="order")
+@Table(schema="`Makizone-Trade`", name = "`order`")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,7 @@ public class Order {
 
     @Column(name="total_price")
     private BigDecimal totalPrice;
+    @JdbcTypeCode(SqlTypes.SMALLINT)
     @Column(name = "status")
     private OrderStatus status;
     @JdbcTypeCode(SqlTypes.JSON)

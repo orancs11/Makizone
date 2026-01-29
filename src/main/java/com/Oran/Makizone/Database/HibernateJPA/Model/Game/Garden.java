@@ -10,12 +10,13 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
-@Table(schema = "Makizone-Game", name = "garden")
+@Table(schema = "`Makizone-Game`", name = "garden")
 public class Garden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JdbcTypeCode(SqlTypes.SMALLINT)
     @Column(name = "theme")
     private GardenTheme theme;
 

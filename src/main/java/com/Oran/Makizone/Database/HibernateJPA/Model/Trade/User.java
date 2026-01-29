@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(schema = "Makizone-Trade", name = "user")
+@Table(schema = "`Makizone-Trade`", name = "user")
 
 public class User {
     @Id

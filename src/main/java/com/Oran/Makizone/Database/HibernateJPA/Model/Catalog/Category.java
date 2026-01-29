@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(schema="Makizone-Catalog", name="category")
+@Table(schema="`Makizone-Catalog`", name="category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

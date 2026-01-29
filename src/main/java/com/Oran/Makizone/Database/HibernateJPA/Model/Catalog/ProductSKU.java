@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 @Entity
-@Table(schema = "Makizone-Catalog", name = "product_skus")
+@Table(schema = "`Makizone-Catalog`", name = "product_skus")
 public class ProductSKU {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

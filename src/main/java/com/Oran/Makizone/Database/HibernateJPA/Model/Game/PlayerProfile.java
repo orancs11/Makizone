@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
-@Table(schema = "Makizone-Game", name = "player_profile")
+@Table(schema = "`Makizone-Game`", name = "player_profile")
 public class PlayerProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

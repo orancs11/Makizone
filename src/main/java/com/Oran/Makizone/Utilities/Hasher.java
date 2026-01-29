@@ -13,9 +13,9 @@ import java.util.Base64;
 @Component
 public class Hasher {
 
-    private static final int ITERATIONS = GlobalVariables.HITERATIONS;
-    private static final int KEY_LENGTH = GlobalVariables.HKEY_LENGTH;
-    private static final String ALGORITHM = GlobalVariables.HALGORITHM;
+    private static final int ITERATIONS = GVF.HITERATIONS;
+    private static final int KEY_LENGTH = GVF.HKEY_LENGTH;
+    private static final String ALGORITHM = GVF.HALGORITHM;
 
     public static String hashPassword(String password) {
         try {

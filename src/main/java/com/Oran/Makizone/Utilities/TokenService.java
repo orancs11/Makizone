@@ -16,8 +16,8 @@ import java.util.function.Function;
 @Component
 public class TokenService {
 
-    private static final String SECRET_KEY = GlobalVariables.SECRET_KEY_TS;
-    private static final long EXPIRATION_TIME = GlobalVariables.EXPIRATION_TIME;
+    private static final String SECRET_KEY = GVF.SECRET_KEY_TS;
+    private static final long EXPIRATION_TIME = GVF.EXPIRATION_TIME;
 
     public String generateToken(String email){
         Map<String, Object> claims = new HashMap<>();
@@ -62,7 +62,7 @@ public class TokenService {
     }
 
     private Key getSigningKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(GlobalVariables.SECRET_KEY_TS);
+        byte[] keyBytes = Decoders.BASE64.decode(GVF.SECRET_KEY_TS);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

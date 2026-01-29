@@ -3,29 +3,34 @@ package com.Oran.Makizone.Database.HibernateJPA.Service.Trade;
 
 import com.Oran.Makizone.DTO.LoginRequest;
 import com.Oran.Makizone.DTO.RegisterRequest;
+import com.Oran.Makizone.Database.HibernateJPA.Model.Game.Garden;
 import com.Oran.Makizone.Database.HibernateJPA.Model.Trade.User;
+import com.Oran.Makizone.Database.HibernateJPA.Repository.Game.GardenRepo;
 import com.Oran.Makizone.Database.HibernateJPA.Repository.Trade.UserRepo;
+import com.Oran.Makizone.Utilities.Enums.GardenTheme;
 import com.Oran.Makizone.Utilities.Exceptions.InvalidCredentialsException;
 import com.Oran.Makizone.Utilities.Exceptions.UserAlreadyExistException;
 import com.Oran.Makizone.Utilities.Exceptions.UserNotFoundException;
+import com.Oran.Makizone.Utilities.GVF;
 import com.Oran.Makizone.Utilities.Hasher;
 import com.Oran.Makizone.Utilities.TokenService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class UserService {
-    private UserRepo repo;
+    private UserRepo userRepo;
     private TokenService tokenService;
+    private GardenRepo gardenRepo;
     @Autowired
-    public UserService(UserRepo repo, TokenService tokenService)
+    public UserService(UserRepo repo, TokenService tokenService, GardenRepo gardenRepo)
     {
-        this.repo = repo;
+        this.userRepo = repo;
         this.tokenService = tokenService;
+        this.gardenRepo = gardenRepo;
     }
 
     @Transactional
@@ -40,20 +45,11 @@ public class UserService {
         Map<String, Object> address = registerRequest.getAddress();
         if(address.isEmpty()) throw new InvalidCredentialsException("userService.registerUser - ADDRESS MUST BE FILLED");
 
-        Optional<User> temp = this.repo.findByEmail(email);
+        Optional<User> temp = this.userRepo.findByEmail(email);
         if(temp.isPresent()) throw new UserAlreadyExistException("");
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(Hasher.hashPassword(password));
-        user.setFullName(fullName);
-        user.setAddress(address);
-        List<String> roles = new ArrayList<>();
-
-        roles.add("CUSTOMER");
-        user.setRole(roles);
-
-        this.repo.save(user);
+        User user = saveUser(email, Hasher.hashPassword(password), fullName, address);
+        saveGarden(user);
         System.out.println("UserService.registerUser - USER SUCCESSFULLY ADDED TO DATABASE!");
 
     }
@@ -74,12 +70,34 @@ public class UserService {
 
 
     private User checkUserExist(String email, String password){
-        Optional<User> list= this.repo.findByEmail(email);
+        Optional<User> list= this.userRepo.findByEmail(email);
         if(!list.isPresent()) return null;
         User user = list.get();
-        System.out.println(user);
         if(!Hasher.verifyPassword(password, user.getPassword())) return null;
         return user;
+    }
+
+    private User saveUser(String email, String password, String fullName, Map<String, Object> address){
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(Hasher.hashPassword(password));
+        user.setFullName(fullName);
+        user.setAddress(address);
+        List<String> roles = new ArrayList<>();
+        roles.add("CUSTOMER");
+        user.setRole(roles);
+
+        userRepo.save(user);
+        return user;
+    }
+
+    private void saveGarden(User user){
+        Garden currGarden = new Garden();
+        Map<String, Object> layout = GVF.createInitialLayout();
+        currGarden.setLayoutData(layout);
+        currGarden.setTheme(GardenTheme.DEFAULT_FARM);
+        currGarden.setUser(user);
+        gardenRepo.save(currGarden);
     }
 
 

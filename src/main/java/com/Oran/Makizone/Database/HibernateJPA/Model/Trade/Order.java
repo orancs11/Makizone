@@ -19,7 +19,7 @@ public class Order {
 
     @Column(name="total_price")
     private BigDecimal totalPrice;
-    @JdbcTypeCode(SqlTypes.SMALLINT)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private OrderStatus status;
     @JdbcTypeCode(SqlTypes.JSON)

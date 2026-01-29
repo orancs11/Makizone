@@ -16,7 +16,7 @@ public class Garden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JdbcTypeCode(SqlTypes.SMALLINT)
+    @Enumerated(EnumType.STRING)
     @Column(name = "theme")
     private GardenTheme theme;
 

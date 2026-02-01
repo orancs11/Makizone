@@ -1,0 +1,3 @@
+CREATE SCHEMA IF NOT EXISTS "Makizone-Catalog";
+CREATE SCHEMA IF NOT EXISTS "Makizone-Game";
+CREATE SCHEMA IF NOT EXISTS "Makizone-Trade";

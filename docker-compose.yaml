@@ -1,0 +1,48 @@
+
+
+services:
+ 
+  frontend:
+    build: ./Makizone-Frontend  # Assuming folder name
+    restart: always
+    ports:
+      - "5173:5173"
+    networks:       
+      - frontend_network
+      
+  backend:
+    build: ./
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/makizone
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+    networks:
+      - frontend_network
+      - backend_network
+    depends_on:
+      - db
+      
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=makizone
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend_network
+      
+volumes:
+  db_data:
+
+networks:
+  frontend_network:
+  backend_network:

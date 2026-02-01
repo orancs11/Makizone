@@ -1,15 +1,22 @@
 package com.Oran.Makizone.Utilities;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class GVF {
-    public static final String SECRET_KEY_TS = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
-    public static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
+    @Value("${SECRET_KEY_TS}")
+    public static String SECRET_KEY_TS;
+    @Value("${EXPIRATION_TIME}")
+    public static long EXPIRATION_TIME;
 
-    public static final int HITERATIONS = 65536;
-    public static final int HKEY_LENGTH = 256;
-    public static final String HALGORITHM = "PBKDF2WithHmacSHA256";
+    @Value("${HASH_KEY_ITERATION}")
+    public static int HITERATIONS;
+    @Value("${HASH_KEY_LENGTH}")
+    public static int HKEY_LENGTH;
+    @Value("${HASH_ALGO}")
+    public static String HALGORITHM;
 
 
     public static Map<String, Object> createInitialLayout(){
